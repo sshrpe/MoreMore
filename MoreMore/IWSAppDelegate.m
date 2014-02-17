@@ -7,12 +7,42 @@
 //
 
 #import "IWSAppDelegate.h"
+#import "IWSMoreTableViewDelegate.h"
+
+@interface IWSAppDelegate ()
+
+@property (nonatomic, strong) IWSMoreTableViewDelegate *tabBarMoreViewDelegate;
+
+@end
 
 @implementation IWSAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+
+    UITableView *moreTableView = (UITableView *)tabBarController.moreNavigationController.topViewController.view;
+    [moreTableView setBackgroundColor:[UIColor blackColor]];
+    [moreTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+
+    self.tabBarMoreViewDelegate = [[IWSMoreTableViewDelegate alloc] initWithForwardingDelegate:moreTableView.delegate];
+    moreTableView.delegate = self.tabBarMoreViewDelegate;
+
+    NSMutableArray *viewControllers = [NSMutableArray array];
+    for (NSInteger i = 0; i<10; i++) {
+        UIViewController *controller = [[UIViewController alloc] init];
+        controller.title = [NSString stringWithFormat:@"View %d",i];
+        [viewControllers addObject:controller];
+    }
+    
+    tabBarController.viewControllers = [NSArray arrayWithArray:viewControllers];
+    self.window.rootViewController = tabBarController;
+    
+    [self.window makeKeyAndVisible];
+    
+    
+    
     return YES;
 }
 							
