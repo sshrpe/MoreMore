@@ -23,17 +23,24 @@
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
 
     UITableView *moreTableView = (UITableView *)tabBarController.moreNavigationController.topViewController.view;
-    [moreTableView setBackgroundColor:[UIColor blackColor]];
-    [moreTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-
-    self.tabBarMoreViewDelegate = [[IWSMoreTableViewDelegate alloc] initWithForwardingDelegate:moreTableView.delegate];
-    moreTableView.delegate = self.tabBarMoreViewDelegate;
-
+    if ([moreTableView isKindOfClass:[UITableView class]]) {
+        [moreTableView setBackgroundColor:[UIColor blackColor]];
+        [moreTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+        
+        self.tabBarMoreViewDelegate = [[IWSMoreTableViewDelegate alloc] initWithForwardingDelegate:moreTableView.delegate];
+        moreTableView.delegate = self.tabBarMoreViewDelegate;
+    }
+    
+    BOOL flag = YES;
     NSMutableArray *viewControllers = [NSMutableArray array];
     for (NSInteger i = 0; i<10; i++) {
         UIViewController *controller = [[UIViewController alloc] init];
         controller.title = [NSString stringWithFormat:@"View %d",i];
         [viewControllers addObject:controller];
+        
+        NSString *imageName = flag ? @"first" : @"second";
+        controller.tabBarItem.image = [UIImage imageNamed:imageName];
+        flag = !flag;
     }
     
     tabBarController.viewControllers = [NSArray arrayWithArray:viewControllers];

@@ -27,7 +27,7 @@
 
 - (BOOL)respondsToSelector:(SEL)aSelector
 {
-    if (aSelector == @selector(tableView:willDisplayCell:forRowAtIndexPath:)) {
+    if ([[self class] instancesRespondToSelector:aSelector]) {
         return YES;
     }
     return [self.forwardingDelegate respondsToSelector:aSelector];
@@ -40,13 +40,20 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.forwardingDelegate tableView:tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
+    if ([self.forwardingDelegate respondsToSelector:_cmd]) {
+        [self.forwardingDelegate tableView:tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
+    }
     
-    cell.backgroundColor = [UIColor clearColor];
+    cell.backgroundColor = [UIColor blackColor];
     cell.textLabel.textColor = [UIColor orangeColor];
+    cell.textLabel.font = [UIFont fontWithName:@"Avenir" size:18];
+    
+    cell.imageView.tintColor = [UIColor purpleColor];
+
     UIView *selectionBackground = [[UIView alloc] initWithFrame:cell.bounds];
     selectionBackground.backgroundColor = [UIColor greenColor];
     cell.selectedBackgroundView = selectionBackground;
+    
 }
 
 @end
