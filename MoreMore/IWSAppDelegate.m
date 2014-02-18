@@ -46,10 +46,6 @@
     tabBarController.viewControllers = [NSArray arrayWithArray:viewControllers];
     self.window.rootViewController = tabBarController;
     
-    [self.window makeKeyAndVisible];
-    
-    
-    
     return YES;
 }
 							
